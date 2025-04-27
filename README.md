@@ -14,9 +14,9 @@ This is the backend of the employee portal web app used for time tracking, shift
 2. Run `npm install`
 3. Create a `.env` file with:
 ```
-PORT=5000
-MONGO_URI=your_mongo_connection_string
-JWT_SECRET=your_secret_key
+PORT=5050
+MONGO_URI=mongodb+srv://jotboparai27:pgc@cluster0.ftmjs1n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=PGC
 ```
 4. Run `npm start`
 
