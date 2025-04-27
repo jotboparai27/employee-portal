@@ -1,13 +1,11 @@
 import mongoose from 'mongoose';
 
 const requestSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  type: { type: String, enum: ['leave', 'shift change', 'other'], required: true },
-  message: { type: String },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  type: { type: String, enum: ['shift_swap', 'benefits'], required: true },
+  details: { type: String, required: true },
   status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
-  dateRequested: { type: Date, default: Date.now },
-  dateResolved: { type: Date },
-  adminNote: { type: String },
-}, { timestamps: true });
+  submittedAt: { type: Date, default: Date.now },
+});
 
 export default mongoose.model('Request', requestSchema);
