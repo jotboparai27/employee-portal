@@ -7,7 +7,7 @@ router.get('/seed', async (req, res) => {
     name: 'Test User',
     email: 'test@email.com',
     passward: '123456',
-    role: 'employee'
+    role: 'admin'
   });
   res.json(user);
 });

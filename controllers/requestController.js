@@ -22,13 +22,23 @@ export const submitRequest = async (req, res) => {
   }
 };
 
-// Get logged-in employee's requests
+// Get logged-in employee's requests with optional status filter
 export const getMyRequests = async (req, res) => {
   try {
-    const requests = await Request.find({ userId: req.user.id }).sort({ submittedAt: -1 });
+    const filter = { userId: req.user.id };
+
+    if (req.query.status) {
+      filter.status = req.query.status; // filter by status if provided (approved, pending, rejected)
+    }
+
+    const requests = await Request.find(filter)
+      .sort({ submittedAt: -1 })
+      .select('type details status submittedAt');
+
     res.json(requests);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 };
+

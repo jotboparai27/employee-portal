@@ -9,6 +9,7 @@ import clockRoutes from './routes/clock.js';
 import shiftRoutes from './routes/shift.js';
 import employeeShiftRoutes from './routes/employeeShift.js';
 import requestRoutes from './routes/request.js';
+import adminRequestRoutes from './routes/adminRequest.js';
 
 
 dotenv.config();
@@ -27,7 +28,7 @@ app.use('/api/clock', clockRoutes);
 app.use('/api/shifts', shiftRoutes);
 app.use('/api', employeeShiftRoutes);
 app.use('/api/requests', requestRoutes);
-
+app.use('/api/requests', adminRequestRoutes);
 
 
 // Test Route
