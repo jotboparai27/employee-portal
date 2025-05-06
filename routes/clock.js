@@ -4,7 +4,7 @@ import protect from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/clock-in', protect, clockIn);
+router.post('/clockIn', protect, clockIn);
 router.patch('/clock-out', protect, clockOut);
 
 export default router;

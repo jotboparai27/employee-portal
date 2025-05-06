@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 
 // Import Routes
+import testRoutes from './routes/test.js';
 import authRoutes from './routes/auth.js';
 import clockRoutes from './routes/clock.js';
 import shiftRoutes from './routes/shift.js';
@@ -23,6 +24,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use('/api', testRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/clock', clockRoutes);
 app.use('/api/shifts', shiftRoutes);

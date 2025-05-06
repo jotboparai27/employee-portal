@@ -1,15 +1,26 @@
 import ClockLog from '../models/ClockLog.js';
 
+
 export const clockIn = async (req, res) => {
   try {
-    const existing = await ClockLog.findOne({ userId: req.user.id, date: new Date().toDateString() });
+    // Get the start and end of the current day
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    // Check if the user has already clocked in today
+    const existing = await ClockLog.findOne({
+      user: req.user.id,
+      clockIn: { $gte: startOfDay, $lte: endOfDay },
+    });
+
     if (existing) {
       return res.status(400).json({ message: 'Already clocked in today' });
     }
 
+    // Create a new clock-in log
     const log = await ClockLog.create({
-      userId: req.user.id,
-      date: new Date().toDateString(),
+      user: req.user.id,
       clockIn: new Date(),
     });
 
@@ -22,7 +33,17 @@ export const clockIn = async (req, res) => {
 
 export const clockOut = async (req, res) => {
   try {
-    const log = await ClockLog.findOne({ userId: req.user.id, date: new Date().toDateString() });
+    // Define today's date range
+    const now = new Date();
+    const startOfDay = new Date(now.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(now.setHours(23, 59, 59, 999));
+
+    // Find today's clock-in record for the user
+    const log = await ClockLog.findOne({
+      user: req.user.id,
+      clockIn: { $gte: startOfDay, $lte: endOfDay },
+    });
+
     if (!log) {
       return res.status(400).json({ message: 'No clock-in found for today' });
     }
