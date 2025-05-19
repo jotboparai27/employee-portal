@@ -3,10 +3,10 @@ import Request from '../models/Request.js';
 // Get all employee requests
 export const getAllRequests = async (req, res) => {
   try {
-    const requests = await Request.find().populate('userId', 'name email').sort({ submittedAt: -1 });
+    // This will pull in name and email from User for each request
+    const requests = await Request.find().populate('userId', 'name email');
     res.json(requests);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 };

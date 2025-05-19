@@ -1,4 +1,5 @@
 import Shift from '../models/Shift.js';
+import Log from '../models/Log.js';
 
 // Create a new shift
 export const assignShift = async (req, res) => {
@@ -9,11 +10,12 @@ export const assignShift = async (req, res) => {
   }
 
   try {
-    const shift = await Shift.create({
-      employeeId,
-      date,
-      startTime,
-      endTime,
+    const shift = await Shift.create({ employeeId, date, startTime, endTime });
+
+    // Log the shift creation
+    await Log.create({
+      event: 'Shift Assigned',
+      details: `Shift assigned to employee ID: ${employeeId} on ${date} from ${startTime} to ${endTime}`,
     });
 
     res.status(201).json({ message: 'Shift assigned successfully', shift });
@@ -22,7 +24,6 @@ export const assignShift = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 // Get all shifts (optional filter by employee)
 export const getShifts = async (req, res) => {
   try {
@@ -38,7 +39,6 @@ export const getShifts = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 // Update a shift
 export const updateShift = async (req, res) => {
   const { id } = req.params;
@@ -53,8 +53,14 @@ export const updateShift = async (req, res) => {
     shift.date = date || shift.date;
     shift.startTime = startTime || shift.startTime;
     shift.endTime = endTime || shift.endTime;
-
     await shift.save();
+
+    // Log the shift update
+    await Log.create({
+      event: 'Shift Updated',
+      details: `Shift ID: ${id} updated to ${date} from ${startTime} to ${endTime}`,
+    });
+
     res.json({ message: 'Shift updated successfully', shift });
   } catch (error) {
     console.error(error);
@@ -73,6 +79,13 @@ export const deleteShift = async (req, res) => {
     }
 
     await shift.deleteOne();
+
+    // Log the shift deletion
+    await Log.create({
+      event: 'Shift Deleted',
+      details: `Shift with ID: ${id} has been deleted`,
+    });
+
     res.json({ message: 'Shift deleted successfully' });
   } catch (error) {
     console.error(error);

@@ -61,3 +61,22 @@ export const clockOut = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const getMyAnalytics = async (req, res) => {
+  const logs = await ClockLog.find({ userId: req.user.id });
+  let totalShifts = logs.length;
+  let totalHours = 0;
+
+  logs.forEach((log) => {
+    if (log.clockIn && log.clockOut) {
+      const diffMs = new Date(log.clockOut) - new Date(log.clockIn);
+      totalHours += diffMs / (1000 * 60 * 60);
+    }
+  });
+
+  res.json({
+    totalShifts,
+    totalHours: totalHours.toFixed(2),
+    // add more stats as needed
+  });
+};

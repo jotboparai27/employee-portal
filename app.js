@@ -12,7 +12,8 @@ import employeeShiftRoutes from './routes/employeeShift.js';
 import requestRoutes from './routes/request.js';
 import adminRequestRoutes from './routes/adminRequest.js';
 import dashboardRoutes from './routes/dashboard.js';
-
+import userRoutes from './routes/userRoutes.js';
+import logRoutes from './routes/logRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -26,15 +27,15 @@ app.use(express.json());
 
 // Routes
 app.use('/api', testRoutes);
+app.use('/api', userRoutes);
+app.use('/api', employeeShiftRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/clock', clockRoutes);
 app.use('/api/shifts', shiftRoutes);
-app.use('/api', employeeShiftRoutes);
 app.use('/api/requests', requestRoutes);
-app.use('/api/requests', adminRequestRoutes);
+app.use('/api/admin/requests', adminRequestRoutes); 
 app.use('/api/dashboard', dashboardRoutes);
-
-
+app.use('/api/logs', logRoutes);  
 
 // Test Route
 app.get('/api/test', (req, res) => {
